@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Web3Auth } from "@web3auth/modal";
 import { CHAIN_NAMESPACES, CustomChainConfig, IProvider, WEB3AUTH_NETWORK } from "@web3auth/base";
 import { Connection, LAMPORTS_PER_SOL, PublicKey, SystemProgram, Transaction } from "@solana/web3.js";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 // IMP END - Quick Start
 import Web3 from "web3";
@@ -11,6 +12,10 @@ import "./App.css";
 import { EthereumPrivateKeyProvider } from "@web3auth/ethereum-provider";
 
 import { SolanaPrivateKeyProvider, SolanaWallet } from "@web3auth/solana-provider";
+import Navbar from "./Components/Navbar";
+import Hero from "./Components/Hero";
+import Navbar2 from "./Components/Navbar2";
+import Payment from "./Components/Payment";
 
 
 // IMP START - SDK Initialization
@@ -75,32 +80,8 @@ function App() {
     }
   };
 
-  const getUserInfo = async () => {
-    // IMP START - Get User Information
-    const user = await web3auth.getUserInfo();
-    // IMP END - Get User Information
-    uiConsole(user);
-  };
-
-  const logout = async () => {
-    // IMP START - Logout
-    await web3auth.logout();
-    // IMP END - Logout
-    setProvider(null);
-    setLoggedIn(false);
-    uiConsole("logged out");
-  };
-
-  // IMP START - Blockchain Calls
   const getAccounts = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    // const web3 = new Web3(provider as any);
 
-    // // Get user's Ethereum public address
-    // const address = await web3.eth.getAccounts();
 
     const solanaWallet = new SolanaWallet(web3auth.provider!);
 
@@ -110,30 +91,15 @@ const accounts = await solanaWallet.requestAccounts();
 console.log("accoutes",accounts)
 
 
+return accounts
 
 
 
-// const account = await connection.getAccountInfo()
-
-// Fetch the balance for the specified public key
-    uiConsole(accounts);
   };
 
   const getBalance = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    // const web3 = new Web3(provider as any);
 
-    // // Get user's Ethereum public address
-    // const address = (await web3.eth.getAccounts())[0];
 
-    // // Get user's balance in ether
-    // const balance = web3.utils.fromWei(
-    //   await web3.eth.getBalance(address), // Balance is in wei
-    //   "ether"
-    // );
     const solanaWallet = new SolanaWallet(web3auth.provider!);
 
     // Get user's Solana public address
@@ -149,136 +115,36 @@ console.log("accoutes",accounts)
     
     // Fetch the balance for the specified public key
     const balance = await connection.getBalance(new PublicKey(accounts[0]));
-    uiConsole(balance);
+    return balance
   };
 
-  const signMessage = async () => {
-    if (!provider) {
-      uiConsole("provider not initialized yet");
-      return;
-    }
-    // const web3 = new Web3(provider as any);
-
-    // // Get user's Ethereum public address
-    // const fromAddress = (await web3.eth.getAccounts())[0];
-
-    // const originalMessage = "YOUR_MESSAGE";
-
-    // // Sign the message
-    // const signedMessage = await web3.eth.personal.sign(
-    //   originalMessage,
-    //   fromAddress,
-    //   "test password!" // configure your own password here.
-    // );
-    const solanaWallet = new SolanaWallet(web3auth.provider!);
-
-    const connectionConfig = await solanaWallet.request<string[], CustomChainConfig>({
-      method: "solana_provider_config",
-      params: [],
-    });
-    
-    const connection = new Connection(connectionConfig.rpcTarget);
-    
-    const accounts = await solanaWallet.requestAccounts();
-    const block = await connection.getLatestBlockhash("finalized");
-    
-    const TransactionInstruction = SystemProgram.transfer({
-      fromPubkey: new PublicKey(accounts[0]),
-      toPubkey: new PublicKey("AkP6uyXntyyXkqerSRHRaxk8AceREgNLquVvUhwmsRfT"),
-      lamports: 0.01 * LAMPORTS_PER_SOL,
-    });
-
-    console.log("tranactio",TransactionInstruction)
-    
-    const transaction = new Transaction({
-      blockhash: block.blockhash,
-      lastValidBlockHeight: block.lastValidBlockHeight,
-      feePayer: new PublicKey(accounts[0]),
-    }).add(TransactionInstruction);
-
-    console.log("trn",transaction)
-    
-    const { signature } = await solanaWallet.signAndSendTransaction(transaction);
-    
-    console.log(signature);
-    
-    
-    
-    uiConsole(signature);
-  };
-  // IMP END - Blockchain Calls
-
-  function uiConsole(...args: any[]): void {
-    const el = document.querySelector("#console>p");
-    if (el) {
-      el.innerHTML = JSON.stringify(args || {}, null, 2);
-    }
-    console.log(...args);
-  }
-
-  const loggedInView = (
-    <>
-      <div className="flex-container">
-        <div>
-          <button onClick={getUserInfo} className="card">
-            Get User Info
-          </button>
-        </div>
-        <div>
-          <button onClick={getAccounts} className="card">
-            Get Accounts
-          </button>
-        </div>
-        <div>
-          <button onClick={getBalance} className="card">
-            Get Balance
-          </button>
-        </div>
-        <div>
-          <button onClick={signMessage} className="card">
-            Sign Message
-          </button>
-        </div>
-        <div>
-          <button onClick={logout} className="card">
-            Log Out
-          </button>
-        </div>
-      </div>
-    </>
-  );
-
-  const unloggedInView = (
-    <button onClick={login} className="card">
-      Login
-    </button>
-  );
+  // Pass the login function to Navbar
+  const navbarWithLogin = <Navbar login={login} loggedIn={loggedIn} getAccounts={getAccounts} getBalance={getBalance}  />;
+  const navbarWithLogin2 = <Navbar2 login={login} loggedIn={loggedIn} getAccounts={getAccounts} getBalance={getBalance}  />;
 
   return (
-    <div className="container">
-      <h1 className="title">
-        <a target="_blank" href="https://web3auth.io/docs/sdk/pnp/web/modal" rel="noreferrer">
-          Web3Auth{" "}
-        </a>
-        & ReactJS (Webpack) Quick Start
-      </h1>
-
-      <div className="grid">{loggedIn ? loggedInView : unloggedInView}</div>
-      <div id="console" style={{ whiteSpace: "pre-line" }}>
-        <p style={{ whiteSpace: "pre-line" }}></p>
-      </div>
-
-      <footer className="footer">
-        <a
-          href="https://github.com/Web3Auth/web3auth-pnp-examples/tree/main/web-modal-sdk/quick-starts/react-modal-quick-start"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Source code
-        </a>
-      </footer>
+    <Router>
+ <Routes>
+ <Route path="/" element={<>
+  <div className="bg-[#F5F2F9]">
+      {navbarWithLogin}
+      <Hero />
     </div>
+ </>} />
+ <Route path="/donate" element={<>
+  <div className="bg-[#F5F2F9]">
+      {navbarWithLogin2}
+      <Payment />
+    </div>
+ </>} />
+    {/* <div className="bg-[#F5F2F9]">
+      {navbarWithLogin}
+      <Hero />
+    </div> */}
+    </Routes>
+    </Router>
   );
 }
 
 export default App;
+
