@@ -33,16 +33,17 @@ const clientId =
     web3AuthNetwork: WEB3AUTH_NETWORK.SAPPHIRE_MAINNET,
     privateKeyProvider: privateKeyProvider,
   });
-const DonationCard = ({ title, description, walletAddress  }) => {
+const DonationCard = ({ title, description, walletAddress }: { title: any; description: any; walletAddress: any }) => {
     const navigate = useNavigate()
 
-    const signMessage = async (amount,walletAddress) => {
-    
+    const signMessage = async (amount: number, walletAddress: string) => {
     console.log(amount,walletAddress)
 
     // IMP END - Login
 
         const solanaWallet = new SolanaWallet(web3auth.provider!);
+
+        console.log(solanaWallet)
     
         const connectionConfig = await solanaWallet.request<string[], CustomChainConfig>({
           method: "solana_provider_config",
@@ -84,7 +85,7 @@ const DonationCard = ({ title, description, walletAddress  }) => {
 
               localStorage.setItem("sadd",accounts[0])
               localStorage.setItem("radd",walletAddress)
-              localStorage.setItem("amount",amount);
+              localStorage.setItem("amount",amount.toString());
               localStorage.setItem("name",title);
               localStorage.setItem("tnx",signature )
 
@@ -123,7 +124,7 @@ const DonationCard = ({ title, description, walletAddress  }) => {
         amount,
       });
 
-      signMessage(amount,walletAddress)
+      signMessage(Number(amount),walletAddress)
     };
   return (
     <div className="border-2 border-purple-600 rounded-lg p-6 bg-purple-100 flex flex-col mb-4">

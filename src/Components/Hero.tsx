@@ -2,7 +2,7 @@ import React from 'react'
 import arrow from "./Vector.png"
 import onboard from "./onboard.png"
 import { useNavigate } from 'react-router-dom'
-const Hero = ({setGoto}) => {
+const Hero = ({setGoto}: {setGoto: any}) => {
     const nav = useNavigate()
   return (
     <div className='flex w-full mx-10'>

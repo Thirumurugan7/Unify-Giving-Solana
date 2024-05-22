@@ -122,9 +122,15 @@ return accounts
   };
 
   // Pass the login function to Navbar
-  const navbarWithLogin = <Navbar login={login} loggedIn={loggedIn} getAccounts={getAccounts} getBalance={getBalance}   />;
-  const navbarWithLogin2 = <Navbar2 login={login} loggedIn={loggedIn} getAccounts={getAccounts} getBalance={getBalance} account={accountva}  />;
-
+  const navbarWithLogin = (
+    <Navbar 
+      login={login} 
+      loggedIn={loggedIn} 
+      getAccounts={getAccounts} 
+      getBalance={getBalance} 
+    />
+  );
+  
   return (
     <Router>
  <Routes>

@@ -3,7 +3,7 @@ import pic from "./Frame.png"
 import { log } from 'console'
 import { get } from 'http'
 
-const Navbar = (login:any, loggedIn:any,getAccounts:any,getBalance:any) => {
+const Navbar = ({ login, loggedIn, getAccounts, getBalance }: { login: any, loggedIn: any, getAccounts: any, getBalance: any }) => {
     const [logged, setLogged] = useState(false)
     const [balance, setBalance] = useState(0);
     const [accounts, setAccounts] = useState("")
@@ -21,9 +21,9 @@ console.log(getAccounts,getBalance);
     const connectHandler = async () => {
         console.log("ip");
         console.log(login)
-        login.login()
-       const bal = await login.getBalance()
-     const acc = await   login.getAccounts()
+        login()
+       const bal = await getBalance()
+     const acc = await   getAccounts()
 console.log(bal,acc);
 setBalance(bal)
 setAccounts(acc)
