@@ -51,15 +51,18 @@ const DonationSuccess = () => {
       </div>
       <div className="flex space-x-4 mb-6">
         <button className="bg-purple-700 text-white rounded-md px-4 py-2 flex items-center" onClick={downloadPDF}>
-          <span className="material-icons">download</span>
+          {/* <span className="material-icons">download</span> */}
           <span className="ml-2">Download</span>
         </button>
-        <button className="bg-purple-700 text-white rounded-md px-4 py-2 flex items-center">
-          <span className="material-icons">share</span>
+        <button 
+          className="bg-purple-700 text-white rounded-md px-4 py-2 flex items-center"
+          onClick={() => window.open(`https://twitter.com/intent/tweet?text=I just donated ${amountDonated} SOL to ${charityName} via Unifygiving on Solana! Check it out! ${transactionHash}`, "_blank")}
+        >
+          {/* <span className="material-icons">share</span> */}
           <span className="ml-2">Tweet Your Impact</span>
         </button>
       </div>
-      <a href="#" className="text-purple-700">Return to Choose Another Cause</a>
+      <a href="/" className="text-purple-700">Return to Choose Another Cause</a>
     </div>
   );
 };
