@@ -3,10 +3,10 @@ import pic from "./Frame.png"
 import { log } from 'console'
 import { get } from 'http'
 
-const Navbar2 = (login:any, loggedIn:any,getAccounts:any,getBalance:any) => {
+const Navbar2 = (login:any, loggedIn:any,getAccounts:any,getBalance:any, account:String) => {
     const [logged, setLogged] = useState(false)
     const [balance, setBalance] = useState(0);
-    const [accounts, setAccounts] = useState("")
+    const [accounts, setAccounts] = useState(account)
     useEffect(()=>{
 if(login.loggedIn){
     setLogged(true)

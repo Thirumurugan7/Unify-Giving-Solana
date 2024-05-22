@@ -16,6 +16,7 @@ import Navbar from "./Components/Navbar";
 import Hero from "./Components/Hero";
 import Navbar2 from "./Components/Navbar2";
 import Payment from "./Components/Payment";
+import DonationSuccess from "./Components/DonationSuccess";
 
 
 // IMP START - SDK Initialization
@@ -50,6 +51,8 @@ const web3auth = new Web3Auth({
 function App() {
   const [provider, setProvider] = useState<IProvider | null>(null);
   const [loggedIn, setLoggedIn] = useState(false);
+  const [goto, setGoto] = useState(false)
+  const [accountva, setAccountval] = useState<String>()
 
   useEffect(() => {
     const init = async () => {
@@ -90,7 +93,7 @@ const accounts = await solanaWallet.requestAccounts();
 
 console.log("accoutes",accounts)
 
-
+setAccountval(accounts[0])
 return accounts
 
 
@@ -119,22 +122,26 @@ return accounts
   };
 
   // Pass the login function to Navbar
-  const navbarWithLogin = <Navbar login={login} loggedIn={loggedIn} getAccounts={getAccounts} getBalance={getBalance}  />;
-  const navbarWithLogin2 = <Navbar2 login={login} loggedIn={loggedIn} getAccounts={getAccounts} getBalance={getBalance}  />;
+  const navbarWithLogin = <Navbar login={login} loggedIn={loggedIn} getAccounts={getAccounts} getBalance={getBalance}   />;
+  const navbarWithLogin2 = <Navbar2 login={login} loggedIn={loggedIn} getAccounts={getAccounts} getBalance={getBalance} account={accountva}  />;
 
   return (
     <Router>
  <Routes>
  <Route path="/" element={<>
+  {navbarWithLogin}
+
   <div className="bg-[#F5F2F9]">
-      {navbarWithLogin}
-      <Hero />
-    </div>
+
+{goto ?  <Payment  /> :       <Hero setGoto={setGoto} />
+}    </div>
  </>} />
- <Route path="/donate" element={<>
+ <Route path="/donated" element={<>
   <div className="bg-[#F5F2F9]">
-      {navbarWithLogin2}
-      <Payment />
+      {/* {navbarWithLogin2} */}
+      {navbarWithLogin}
+
+      <DonationSuccess  />
     </div>
  </>} />
     {/* <div className="bg-[#F5F2F9]">

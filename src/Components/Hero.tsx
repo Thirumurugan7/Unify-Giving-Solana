@@ -2,7 +2,7 @@ import React from 'react'
 import arrow from "./Vector.png"
 import onboard from "./onboard.png"
 import { useNavigate } from 'react-router-dom'
-const Hero = () => {
+const Hero = ({setGoto}) => {
     const nav = useNavigate()
   return (
     <div className='flex w-full mx-10'>
@@ -37,7 +37,7 @@ const Hero = () => {
             </div>
             <div className='flex gap-[15px] mt-[40px]'>
                 
-                <button className='bg-[#6200EE] text-white py-3 px-6 rounded-[40px]' onClick={()=>nav("/donate")}>
+                <button className='bg-[#6200EE] text-white py-3 px-6 rounded-[40px]' onClick={()=>setGoto(true)}>
                     Donate
                 </button>
                 <button className='bg-[#FFF] text-[#6200EE] py-3 px-6 rounded-[40px] border-[#CE97FD] border-[1px]'>

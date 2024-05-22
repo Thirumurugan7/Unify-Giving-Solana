@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { SetStateAction, useEffect, useState } from 'react'
 import pic from "./Frame.png"
 import { log } from 'console'
 import { get } from 'http'
